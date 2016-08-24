@@ -16,7 +16,7 @@
 		$("#iframeConf:button").click(function(){
 			alert("Node IP: " + bootstrapNode)
 		    var iframe = $("#view");
-		    iframe.attr("src", iframe.data("src")); 
+		    iframe.attr("src", iframe.attr("data-src")); 
 		});
 	});
 	
@@ -27,13 +27,13 @@
 
 <h1>Suite Installer</h1>
 
-<button id="createPod">Create Configuration Pod</button>
+<div style="float: left;">
+	<button id="createPod" style="position: absolute;">Create Configuration Pod</button>
 
-<button id="iframeConf">Iframe Configuration Page</button>
+	<button id="iframeConf" style="position: relative; margin-top: 40px;">Iframe Configuration Page</button>
+</div>
 
-<iframe data-src="configuration.html" src="about:blank" id="view" width="700px" height="500px" style="background:#ffffff"></iframe>
-
-
+<iframe data-src="configuration.html" src="about:blank" id="view" width="700px" height="500px" style="background:#ffffff; margin-left: 20px;"></iframe>
 
 </body>
 </html>
