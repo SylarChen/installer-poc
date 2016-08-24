@@ -1,0 +1,39 @@
+<html>
+<head>
+    <title>Spring Static Page</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script>
+	var bootstrapNode;
+	
+	$(document).ready(function(){
+		$("#createPod:button").click(function(){
+		    $.get("/suiteinstaller/createPod", function(data, status){
+		    	bootstrapNode = data;
+		        alert("Data: " + data + "\nStatus: " + status);
+		    });
+		});
+		
+		$("#iframeConf:button").click(function(){
+			alert("Node IP: " + bootstrapNode)
+		    var iframe = $("#view");
+		    iframe.attr("src", iframe.data("src")); 
+		});
+	});
+	
+
+	</script>
+</head>
+<body>
+
+<h1>Suite Installer</h1>
+
+<button id="createPod">Create Configuration Pod</button>
+
+<button id="iframeConf">Iframe Configuration Page</button>
+
+<iframe data-src="configuration.html" src="about:blank" id="view" width="700px" height="500px" style="background:#ffffff"></iframe>
+
+
+
+</body>
+</html>

@@ -1,0 +1,30 @@
+<html>
+<head>
+    <title>Spring Static Page</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script>
+	$(document).ready(function(){
+		$("#copy:button").click(function(){
+		    $.get("/suiteconf/copy", function(data, status){
+		        alert("Data: " + data + "\nStatus: " + status);
+		    });
+		});
+		
+		$("#finish:button").click(function(){
+		    $.get("/suiteconf/finish", function(data, status){
+		        alert("Data: " + data + "\nStatus: " + status);
+		    });
+		});
+	});
+	</script>
+</head>
+<body>
+
+<h1>Suite Configuration Page</h1>
+
+<button id="copy">Copy Yamls To PV</button>
+
+<button id="finish">Finish Configuration</button>
+
+</body>
+</html>
