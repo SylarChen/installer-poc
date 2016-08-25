@@ -3,7 +3,6 @@
     <title>Spring Static Page</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 	<script>
-	var bootstrapNode;
 	
 	$(document).ready(function(){
 		$("#createPod:button").click(function(){
@@ -14,12 +13,13 @@
 		});
 		
 		$("#iframeConf:button").click(function(){
-			alert("Node IP: " + bootstrapNode)
-		    var iframe = $("#view");
-		    iframe.attr("src", iframe.attr("data-src")); 
+			var conpodip = $("#conpodip").val();
+			var url = "http://" + conpodip + "/configuration.html";
+			alert("Going to iframe: " + url)
+			var iframe = $("#view");
+		    iframe.attr("src", url); 
 		});
 	});
-	
 
 	</script>
 </head>
@@ -27,13 +27,17 @@
 
 <h1>Suite Installer</h1>
 
-<div style="float: left;">
-	<button id="createPod" style="position: absolute;">Create Configuration Pod</button>
-
-	<button id="iframeConf" style="position: relative; margin-top: 40px;">Iframe Configuration Page</button>
+<div style="width: 20%;text-align: left;float:left;">
+	<button id="createPod">Create Configuration Pod</button>
+	<p>IP and Port of Suite Configuration Pod : </p>
+	<p>
+    	<input type="text" id="conpodip">
+  	</p>
+	<button id="iframeConf">Iframe Configuration Page</button>
 </div>
 
-<iframe data-src="configuration.html" src="about:blank" id="view" width="700px" height="500px" style="background:#ffffff; margin-left: 20px;"></iframe>
+<iframe data-src="configuration.html" src="about:blank" id="view" width="50%" height="600px" style="background:#ffffff;float:left;"></iframe>
+
 
 </body>
 </html>
