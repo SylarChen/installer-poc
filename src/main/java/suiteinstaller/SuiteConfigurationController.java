@@ -1,5 +1,7 @@
 package suiteinstaller;
 
+import java.io.IOException;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -12,9 +14,12 @@ public class SuiteConfigurationController {
 	@RequestMapping(value="/copy", method=RequestMethod.GET)
 	@ResponseBody
     public String copy() {
-		//Execute command
-		//Copy yamls to PV
-        return "Copy yamls to PV";
+		try {
+			Runtime.getRuntime().exec("/copyYamls.sh");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+        return "Copy yamls to /var/vols/ITOM/suite-install/itsma/output";
     }
 	
 	
