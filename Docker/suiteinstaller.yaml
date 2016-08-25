@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: suite-installer
+  labels:
+    name: suite-installer-app
+spec:
+  containers:
+  - name: suite-installer
+    image: suite-installer
+    imagePullPolicy: IfNotPresent
+    env:
+    - name: API_SERVER_IP
+      value: 16.187.189.90
+    - name: API_SERVER_PORT
+      value: "8080"
+    ports:
+    - containerPort: 8080
+    volumeMounts:
+    - name: image-store
+      mountPath: /pv_suite_install
+      subPath: suite-install
+  volumes:
+  - name: image-store
+    persistentVolumeClaim:
+      claimName: itom-vol-claim
+
+
+----
+apiVersion: v1
+kind: Service
+metadata:
+  name: suite-installer-svc
+spec:
+  type: NodePort
+  ports:
+  - port: 8080
+    nodePort: 30000
+  # label keys and values that must match in order to receive traffic for this service
+  selector:
+    name: suite-installer-app

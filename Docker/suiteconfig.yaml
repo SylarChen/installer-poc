@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: suite-config
+  labels:
+    name: suite-conf-app
+spec:
+  containers:
+  - name: suite-config
+    image: suite-installer
+    imagePullPolicy: IfNotPresent
+    env:
+    - name: SUITE_INSTALLER_IP
+      value: 16.187.189.90
+    - name: SUITE_INSTALLER_PORT
+      value: "30000"
+    ports:
+    - containerPort: 8080
+    volumeMounts:
+    - name: image-store
+      mountPath: /pv_suite_conf
+      subPath: suite-install/itsma
+  volumes:
+  - name: image-store
+    persistentVolumeClaim:
+      claimName: itom-vol-claim
+

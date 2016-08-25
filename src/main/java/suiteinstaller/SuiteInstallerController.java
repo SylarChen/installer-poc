@@ -23,7 +23,17 @@ public class SuiteInstallerController {
 		}
         return "Pod is createing";
     }
-//    public String greeting(@RequestParam(value="name", required=false, defaultValue="World") String name) {
+	
+	//https://spring.io/guides/tutorials/bookmarks/
+//	@RequestMapping(value="/installsuite", method=RequestMethod.POST)
+//	@ResponseBody
+//    public String greeting(@RequestBody requestBody) {
+//        return "greeting";
+//    }
+	
+//	@RequestMapping(value="/installsuite", method=RequestMethod.POST)
+//	@ResponseBody
+//    public String greeting(@RequestParam(value="suite", required=true) String suite) {
 //        return "greeting";
 //    }
 }
