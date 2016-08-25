@@ -5,6 +5,8 @@ ADD suite-installer-1.0.jar /
 #ADD suiteconfig_svc.yaml /
 ADD createpod.sh /
 RUN chmod +x /createpod.sh
+ADD createsinglepod.sh /
+RUN chmod +x /createsinglepod.sh
 
 #Suite installer mountpath
 RUN mkdir /pv_suite_install
