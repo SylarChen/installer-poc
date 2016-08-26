@@ -26,7 +26,11 @@ public class SuiteConfigurationController {
 	@RequestMapping(value="/finish", method=RequestMethod.GET)
 	@ResponseBody
     public String finish() {
-		//send request to suite installer.
+		try {
+			Runtime.getRuntime().exec("/askCreateBusinessPod.sh");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
         return "Call Back Suite Installer...";
     }
 
