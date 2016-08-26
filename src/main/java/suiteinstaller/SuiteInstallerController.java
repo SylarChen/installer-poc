@@ -49,9 +49,10 @@ public class SuiteInstallerController {
 }
 
 /*
+http://16.187.189.90:30000/suiteinstaller/install
 {
     "suiteName" : "itsma",
-    "yamlList" : ["test1.yaml, test2.yaml"]
+    "yamlList" : ["test1.yaml", "test2.yaml"]
 }
 */
 
