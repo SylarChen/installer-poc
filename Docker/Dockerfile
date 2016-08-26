@@ -1,6 +1,4 @@
 FROM java:8
-ADD suite-installer-1.0.jar /
-
 #ADD suiteconfig.yaml /
 #ADD suiteconfig_svc.yaml /
 ADD createpod.sh /
@@ -17,6 +15,10 @@ RUN mkdir /pv_suite_conf
 ADD suite_yamls /suite_yamls
 ADD copyYamls.sh /
 RUN chmod +x /copyYamls.sh
+ADD postBody.json /
+ADD askCreateBusinessPod.sh /
+RUN chmod +x /askCreateBusinessPod.sh
 
+ADD suite-installer-1.0.jar /
 ADD entrypoint.sh /
 ENTRYPOINT ["/bin/bash","/entrypoint.sh"]
