@@ -18,10 +18,10 @@
 	        <artifactId>spring-boot-starter-web</artifactId>
 	    </dependency>
 	    <dependency>
-		    <groupId>com.esotericsoftware.yamlbeans</groupId>
-		    <artifactId>yamlbeans</artifactId>
-		    <version>1.08</version>
-		</dependency>
+	        <groupId>com.esotericsoftware.yamlbeans</groupId>
+	        <artifactId>yamlbeans</artifactId>
+	        <version>1.08</version>
+	    </dependency>
 	</dependencies>
 
 
