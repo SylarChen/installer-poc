@@ -34,13 +34,22 @@ public class SuiteInstallerController {
 		System.out.println("yamlFolder : " + yamlFolder);
 		
 		try {
-			for(String yaml : suite.getYamlList()){
-				String path = yamlFolder + yaml;
-				System.out.println("Create pod : " + path);
-				String[] commands = {"/createsinglepod.sh", path};
+			for(SuiteYaml yaml : suite.getYamlList()){
+				String path = yamlFolder + yaml.getYaml();
+				System.out.println("Create pod : " + path + ", Type: " + yaml.getType());
+				String[] commands = {null, path};
+				if("service".equalsIgnoreCase(yaml.getType())){
+					commands[0] = "createsingleservice.sh";
+				}else if("pod".equalsIgnoreCase(yaml.getType())){
+					commands[0] = "/createsinglepod.sh";
+				}else if("configmap".equalsIgnoreCase(yaml.getType())){
+					commands[0] = "createsingleconfigmap.sh";
+				}else{
+					throw new Exception("Can't find type for yaml: " + path);
+				}
 				Runtime.getRuntime().exec(commands);
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
@@ -51,8 +60,21 @@ public class SuiteInstallerController {
 /*
 http://16.187.189.90:30000/suiteinstaller/install
 {
-    "suiteName" : "itsma",
-    "yamlList" : ["test1.yaml", "test2.yaml"]
+  "suiteName": "itsma",
+  "yamlList": [
+    {
+      "yaml": "configmap.yaml",
+      "type": "configmap"
+    },
+    {
+      "yaml": "test.yaml",
+      "type": "pod"
+    },
+    {
+      "yaml": "test_svc.yaml",
+      "type": "service"
+    }
+  ]
 }
 */
 
@@ -63,13 +85,13 @@ class Suite {
 	}
 
 	private String suiteName;
-    private List<String> yamlList;
+    private List<SuiteYaml> yamlList;
 	
     public String getSuiteName() {
 		return suiteName;
 	}
 
-	public List<String> getYamlList() {
+	public List<SuiteYaml> getYamlList() {
 		return yamlList;
 	}
 
@@ -77,7 +99,24 @@ class Suite {
         this.suiteName = suiteName;
     }
     
-    public void setYamlList(List<String> yamlList) {
+    public void setYamlList(List<SuiteYaml> yamlList) {
         this.yamlList = yamlList;
     }
+}
+
+class SuiteYaml {
+	private String yaml;
+	private String type;
+    public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	public String getYaml() {
+		return yaml;
+	}
+	public void setYaml(String yaml) {
+		this.yaml = yaml;
+	}
 }
