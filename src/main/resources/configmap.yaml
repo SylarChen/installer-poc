@@ -1,0 +1,8 @@
+metadata: 
+   name: my-config
+   namespace: kube-system
+apiVersion: v1
+data: 
+   pg.pwd: postgres
+   pg.user: postgres
+kind: ConfigMap
