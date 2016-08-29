@@ -5,6 +5,10 @@ ADD createpod.sh /
 RUN chmod +x /createpod.sh
 ADD createsinglepod.sh /
 RUN chmod +x /createsinglepod.sh
+ADD createsingleconfigmap.sh /
+RUN chmod +x /createsingleconfigmap.sh
+ADD createsingleservice.sh /
+RUN chmod +x /createsingleservice.sh
 
 #Suite installer mountpath
 RUN mkdir /pv_suite_install

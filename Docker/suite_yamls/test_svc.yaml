@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-svc
+spec:
+  type: NodePort
+  ports:
+  - port: 5432
+    nodePort: 30002
+  selector:
+    name: test

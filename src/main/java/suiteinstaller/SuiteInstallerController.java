@@ -36,14 +36,17 @@ public class SuiteInstallerController {
 		try {
 			for(SuiteYaml yaml : suite.getYamlList()){
 				String path = yamlFolder + yaml.getYaml();
-				System.out.println("Create pod : " + path + ", Type: " + yaml.getType());
+				System.out.println("Build Yaml : " + path + ", Type: " + yaml.getType());
 				String[] commands = {null, path};
 				if("service".equalsIgnoreCase(yaml.getType())){
-					commands[0] = "createsingleservice.sh";
+					System.out.println("Create srevice...");
+					commands[0] = "/createsingleservice.sh";
 				}else if("pod".equalsIgnoreCase(yaml.getType())){
+					System.out.println("Create pod...");
 					commands[0] = "/createsinglepod.sh";
 				}else if("configmap".equalsIgnoreCase(yaml.getType())){
-					commands[0] = "createsingleconfigmap.sh";
+					System.out.println("Create configmap...");
+					commands[0] = "/createsingleconfigmap.sh";
 				}else{
 					throw new Exception("Can't find type for yaml: " + path);
 				}

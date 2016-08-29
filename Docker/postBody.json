@@ -1,4 +1,17 @@
 {
-    "suiteName" : "itsma",
-    "yamlList" : ["test1.yaml", "test2.yaml"]
+  "suiteName": "itsma",
+  "yamlList": [
+    {
+      "yaml": "configmap.yaml",
+      "type": "configmap"
+    },
+    {
+      "yaml": "test.yaml",
+      "type": "pod"
+    },
+    {
+      "yaml": "test_svc.yaml",
+      "type": "service"
+    }
+  ]
 }
