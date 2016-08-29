@@ -1,8 +1,12 @@
 package suiteinstaller;
 
+import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Map;
 
 import org.springframework.stereotype.Controller;
@@ -60,6 +64,40 @@ public class SuiteConfigurationController {
 			e.printStackTrace();
 		}
         return "Call Back Suite Installer...";
+    }
+	
+	@RequestMapping(value="/status", method=RequestMethod.GET)
+	@ResponseBody
+    public String status() {
+		URL url;
+		StringBuffer output = new StringBuffer();
+		try {
+//			url = new URL("http://localhost:8080/suiteinstaller/install?podname=suite-postgres");
+			url = new URL("http://IP:PORT/suiteinstaller/install?podname=suite-postgres");
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+
+			if (conn.getResponseCode() != 200) {
+				throw new RuntimeException("Failed : HTTP error code : "
+						+ conn.getResponseCode());
+			}
+
+			BufferedReader br = new BufferedReader(new InputStreamReader(
+				(conn.getInputStream())));
+
+			System.out.println("Output from Server ....");
+			String str;
+			while ((str = br.readLine()) != null) {
+				output.append(str).append(System.lineSeparator());
+			}
+			conn.disconnect();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+
+        return output.toString();
     }
 
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -58,6 +59,20 @@ public class SuiteInstallerController {
 		
 		return "Creating yaml : " + suite.getYamlList();
 	}
+	
+	@RequestMapping(value="/install", method=RequestMethod.GET)
+	@ResponseBody
+    public String getPodStatus(@RequestParam(value="podname", required=true) String podname) {
+		String api_server_ip = System.getenv().get("$API_SERVER_IP");
+		String api_server_port = System.getenv().get("$API_SERVER_PORT");
+		String url = "http://$API_SERVER_IP:$API_SERVER_PORT/api/v1/namespaces/kube-system/pods/$POD_NAME/status"
+				.replace("$API_SERVER_IP", api_server_ip==null?"null":api_server_ip)
+				.replace("$API_SERVER_PORT", api_server_port==null?"null":api_server_port)
+				.replace("$POD_NAME", podname);
+		System.out.println("Get pod status: " + url);
+				
+        return url + System.lineSeparator() + url;
+    }
 }
 
 /*
