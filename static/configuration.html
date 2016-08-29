@@ -5,7 +5,8 @@
 	<script>
 	$(document).ready(function(){
 		$("#copy:button").click(function(){
-		    $.get("/suiteconf/copy", function(data, status){
+			var url = "/suiteconf/copy?user=" + $("#pg_uname").val() + "&password=" + $("#pg_upwd").val();
+		    $.get(url, function(data, status){
 		        alert("Data: " + data + "\nStatus: " + status);
 		    });
 		});
