@@ -105,7 +105,7 @@ public class SuiteInstallerController {
 			return "Suite Installer Internal Error!";
 		}
 		
-        return output.toString();
+        return output.toString().trim();
     }
 }
 

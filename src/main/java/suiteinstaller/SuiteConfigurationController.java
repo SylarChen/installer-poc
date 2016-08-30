@@ -107,7 +107,7 @@ public class SuiteConfigurationController {
 		}
 
 
-        return output.toString();
+        return output.toString().trim();
     }
 
 }
