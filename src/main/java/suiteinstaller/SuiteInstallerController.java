@@ -41,8 +41,8 @@ public class SuiteInstallerController {
 		try {
 			for(SuiteYaml yaml : suite.getYamlList()){
 				String path = yamlFolder + yaml.getYaml();
-				System.out.println("Build Yaml : " + path + ", Type: " + yaml.getType());
-				String[] commands = {null, path};
+				System.out.println("Build Yaml : " + path + ", Type: " + yaml.getType() + ", NameSpace: "+ suite.getSuiteNameSpace());
+				String[] commands = {null, path, suite.getSuiteNameSpace()};
 				if("service".equalsIgnoreCase(yaml.getType())){
 					System.out.println("Create srevice...");
 					commands[0] = "/createsingleservice.sh";
@@ -113,6 +113,7 @@ public class SuiteInstallerController {
 http://16.187.189.90:30000/suiteinstaller/install
 {
   "suiteName": "itsma",
+  "suiteNameSpace": "itsma"
   "yamlList": [
     {
       "yaml": "configmap.yaml",
@@ -128,17 +129,30 @@ http://16.187.189.90:30000/suiteinstaller/install
     }
   ]
 }
+
 */
 
 class Suite {
+
+
 	@Override
 	public String toString() {
-		return "Suite [suiteName=" + suiteName + ", yamlList=" + yamlList + "]";
+		return "Suite [suiteName=" + suiteName + ", suiteNameSpace="
+				+ suiteNameSpace + ", yamlList=" + yamlList + "]";
 	}
 
 	private String suiteName;
-    private List<SuiteYaml> yamlList;
+	private String suiteNameSpace;
+	private List<SuiteYaml> yamlList;
 	
+    public String getSuiteNameSpace() {
+		return suiteNameSpace;
+	}
+
+	public void setSuiteNameSpace(String suiteNameSpace) {
+		this.suiteNameSpace = suiteNameSpace;
+	}
+
     public String getSuiteName() {
 		return suiteName;
 	}
