@@ -70,10 +70,19 @@ public class SuiteConfigurationController {
 	@ResponseBody
     public String status() {
 		URL url;
+		String suite_installer_ip = System.getenv().get("SUITE_INSTALLER_IP");
+		String suite_installer_port = System.getenv().get("SUITE_INSTALLER_PORT");
+		String api = "http://$SUITE_INSTALLER_IP:$SUITE_INSTALLER_PORT/suiteinstaller/install?podname=$POD_NAME"
+				.replace("$SUITE_INSTALLER_IP", suite_installer_ip==null?"null":suite_installer_ip)
+				.replace("$SUITE_INSTALLER_PORT", suite_installer_port==null?"null":suite_installer_port)
+				.replace("$POD_NAME", "suite-postgres");
+		System.out.println("Suite-Config: Get pod status: " + api);
+		
 		StringBuffer output = new StringBuffer();
 		try {
-//			url = new URL("http://localhost:8080/suiteinstaller/install?podname=suite-postgres");
-			url = new URL("http://IP:PORT/suiteinstaller/install?podname=suite-postgres");
+
+			url = new URL(api);
+//			url = new URL("http://IP:PORT/suiteinstaller/install?podname=suite-postgres");
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 
@@ -94,6 +103,7 @@ public class SuiteConfigurationController {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+			return e.getMessage();
 		}
 
 

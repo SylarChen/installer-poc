@@ -1,6 +1,10 @@
 package suiteinstaller;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
@@ -63,15 +67,45 @@ public class SuiteInstallerController {
 	@RequestMapping(value="/install", method=RequestMethod.GET)
 	@ResponseBody
     public String getPodStatus(@RequestParam(value="podname", required=true) String podname) {
-		String api_server_ip = System.getenv().get("$API_SERVER_IP");
-		String api_server_port = System.getenv().get("$API_SERVER_PORT");
-		String url = "http://$API_SERVER_IP:$API_SERVER_PORT/api/v1/namespaces/kube-system/pods/$POD_NAME/status"
+		String api_server_ip = System.getenv().get("API_SERVER_IP");
+		String api_server_port = System.getenv().get("API_SERVER_PORT");
+//		String api_server_ip = "16.187.189.90";
+//		String api_server_port = "8080";
+		String api = "http://$API_SERVER_IP:$API_SERVER_PORT/api/v1/namespaces/kube-system/pods/$POD_NAME/status"
 				.replace("$API_SERVER_IP", api_server_ip==null?"null":api_server_ip)
 				.replace("$API_SERVER_PORT", api_server_port==null?"null":api_server_port)
 				.replace("$POD_NAME", podname);
-		System.out.println("Get pod status: " + url);
-				
-        return url + System.lineSeparator() + url;
+		System.out.println("Suite-Installer: Get pod status: " + api);
+		
+		//Send request to API server to query status of pod
+		URL url;
+		StringBuffer output = new StringBuffer();
+		try {
+			url = new URL(api);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+
+			if (conn.getResponseCode() != 200) {
+				throw new RuntimeException("Failed : HTTP error code : "
+						+ conn.getResponseCode());
+			}
+
+			BufferedReader br = new BufferedReader(new InputStreamReader(
+				(conn.getInputStream())));
+
+			System.out.println("Output from Server ....");
+			String str;
+			while ((str = br.readLine()) != null) {
+				output.append(str).append(System.lineSeparator());
+			}
+			conn.disconnect();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "Suite Installer Internal Error!";
+		}
+		
+        return output.toString();
     }
 }
 

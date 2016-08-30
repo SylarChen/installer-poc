@@ -19,3 +19,9 @@ spec:
         configMapKeyRef:
           name: my-config
           key: pg.pwd
+    livenessProbe:
+      exec:
+        command:
+        - ls
+      initialDelaySeconds: 15
+      timeoutSeconds: 1

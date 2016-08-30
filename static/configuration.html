@@ -19,7 +19,6 @@
 		
 		$("#status:button").click(function(){
 		    $.get("/suiteconf/status", function(data, status){
-		    	alert("Data: " + data + "\nStatus: " + status);
 		    	$("#status_p").text(data);
 		    });
 		});
