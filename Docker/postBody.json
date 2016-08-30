@@ -1,5 +1,6 @@
 {
   "suiteName": "itsma",
+  "suiteNameSpace": "itsma",
   "yamlList": [
     {
       "yaml": "configmap.yaml",
