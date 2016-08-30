@@ -19,9 +19,11 @@
 		
 		$("#status:button").click(function(){
 		    $.get("/suiteconf/status", function(data, status){
-		    	$("#status_p").text(data);
+		    	var str = JSON.stringify(JSON.parse(data),null,2); 
+		    	$("#status_p").html(str);
 		    });
 		});
+		
 	});
 	</script>
 </head>
@@ -29,7 +31,7 @@
 
 <h1>Suite Configuration Pages</h1>
 
-<div style="width: 60%;text-align: left;">
+<div style="width: 100%;text-align: left;">
 	<p>Postgres User Name : </p>
 	<p>
     	<input type="text" id="pg_uname">
@@ -42,8 +44,8 @@
 	<button id="copy">Copy Yamls To PV</button>
 	<button id="finish">Finish Configuration</button>
 	<button id="status">Get Pods Status</button>
-	<p id="status_p">
-  	</p>
+	<pre id="status_p">
+  	</pre>
 </div>
 
 
