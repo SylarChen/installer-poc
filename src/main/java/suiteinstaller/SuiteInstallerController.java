@@ -71,7 +71,7 @@ public class SuiteInstallerController {
 		String api_server_port = System.getenv().get("API_SERVER_PORT");
 //		String api_server_ip = "16.187.189.90";
 //		String api_server_port = "8080";
-		String api = "http://$API_SERVER_IP:$API_SERVER_PORT/api/v1/namespaces/kube-system/pods/$POD_NAME/status"
+		String api = "http://$API_SERVER_IP:$API_SERVER_PORT/api/v1/namespaces/itsma/pods/$POD_NAME/status"
 				.replace("$API_SERVER_IP", api_server_ip==null?"null":api_server_ip)
 				.replace("$API_SERVER_PORT", api_server_port==null?"null":api_server_port)
 				.replace("$POD_NAME", podname);
