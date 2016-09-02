@@ -1,0 +1,1 @@
+create_configmap.sh 16.187.189.90 8080 itsma /C/WorkSpace/MyGitHub/installer-poc/Docker/bin/config.yaml
