@@ -1,27 +1,9 @@
+kubectl_create.sh 16.187.189.90 8080 '' errortype /C/WorkSpace/MyGitHub/installer-poc/Docker/bin/yamls/namespace.yaml
+
 kubectl_create.sh 16.187.189.90 8080 '' namespaces /C/WorkSpace/MyGitHub/installer-poc/Docker/bin/yamls/namespace.yaml
 kubectl_create.sh 16.187.189.90 8080 default configmaps /C/WorkSpace/MyGitHub/installer-poc/Docker/bin/yamls/configmap.yaml
 kubectl_create.sh 16.187.189.90 8080 default services /C/WorkSpace/MyGitHub/installer-poc/Docker/bin/yamls/svc.yaml
 kubectl_create.sh 16.187.189.90 8080 default replicationcontrollers /C/WorkSpace/MyGitHub/installer-poc/Docker/bin/yamls/rc.yaml
 
-kubectl_extension_create.sh 16.187.189.90 8080 default ingresses /C/WorkSpace/MyGitHub/installer-poc/Docker/bin/yamls/ingress.yaml
-kubectl_extension_create.sh 16.187.189.90 8080 default deployments /C/WorkSpace/MyGitHub/installer-poc/Docker/bin/yamls/deploy.yaml
-
-
-
-
-
-
-
-
-
-
-
-
-
-kubectl_create_2.sh 16.187.189.90 8080 '' namespaces /C/WorkSpace/MyGitHub/installer-poc/Docker/bin/yamls/namespace.yaml
-kubectl_create_2.sh 16.187.189.90 8080 default configmaps /C/WorkSpace/MyGitHub/installer-poc/Docker/bin/yamls/configmap.yaml
-kubectl_create_2.sh 16.187.189.90 8080 default services /C/WorkSpace/MyGitHub/installer-poc/Docker/bin/yamls/svc.yaml
-kubectl_create_2.sh 16.187.189.90 8080 default replicationcontrollers /C/WorkSpace/MyGitHub/installer-poc/Docker/bin/yamls/rc.yaml
-
-kubectl_create_2.sh 16.187.189.90 8080 default ingresses /C/WorkSpace/MyGitHub/installer-poc/Docker/bin/yamls/ingress.yaml
-kubectl_create_2.sh 16.187.189.90 8080 default deployments /C/WorkSpace/MyGitHub/installer-poc/Docker/bin/yamls/deploy.yaml
+kubectl_create.sh 16.187.189.90 8080 default ingresses /C/WorkSpace/MyGitHub/installer-poc/Docker/bin/yamls/ingress.yaml
+kubectl_create.sh 16.187.189.90 8080 default deployments /C/WorkSpace/MyGitHub/installer-poc/Docker/bin/yamls/deploy.yaml
