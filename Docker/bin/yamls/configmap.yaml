@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata: 
+  name: am-common-configmap
+data: 
+  common.propertis: |- 
+    DB_engine=Oracle
+    DB_datasource=16.186.74.118/AMORA12C
+    DB_login=AMO15088en
+    DB_password=password
+    DB_library_path=/app/AssetManager/x64/libaamapi96.so
+    promptForPwd=false
+    Password_First_Value=bigintcs:006c33-713236-6a6461-346b34-6f6e64-366278-f578fc-7c966a-cd9050-81361b-d20387-AC614F
+    Password_Second_Value=bigintcs:006c33-713236-6a6461-346b34-6f6e64-36627b-7a8797-84bd9c-30af3b-9101c6-3897a7-59D53C

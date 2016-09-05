@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: am-web-rc
+  labels:
+    name: am-web-rc
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: am-web-pod
+    spec:
+      volumes:
+      - name : "am-web-log"
+        hostPath:
+          path: /logs
+      - name: "am-common-configmap"
+        configMap:
+          name: am-common-configmap
+      - name: "am-websvc-configmap"
+        configMap:
+          name: am-websvc-configmap
+      - name: "am-webtier-configmap"
+        configMap:
+          name: am-webtier-configmap
+      containers:
+      - name: am-websvc-pod
+        image: docker.hos.hpecorp.net/itsma/am-websvc:v1-beta 
+        ports:
+        - containerPort: 8081
+        volumeMounts:
+        - mountPath: "/var/logs"
+          name: "am-web-log"
+        - mountPath: "/properties/common"
+          name: "am-common-configmap"
+        - mountPath: "/properties/websvc"
+          name: "am-websvc-configmap"
+        lifecycle:
+          preStop:
+           exec:
+            command: ["/app/apache-tomcat-8/bin/catalina.sh", "stop"]
+      - name: am-webtier-pod
+        image: docker.hos.hpecorp.net/itsma/am-webtier:v1-beta
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - mountPath: "/var/logs"
+          name: "am-web-log"
+        - mountPath: "/properties/common"
+          name: "am-common-configmap"
+        - mountPath: "/properties/webtier"
+          name: "am-webtier-configmap"
+        lifecycle:
+          preStop:
+           exec:
+            command: ["/app/apache-tomcat-8/bin/catalina.sh", "stop"]
+      imagePullSecrets:
+       - name: registrypullsecret
+#      nodeName: amkuminion1.asiapacific.hpqcorp.net
