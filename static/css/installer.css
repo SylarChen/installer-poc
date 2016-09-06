@@ -27,33 +27,69 @@
 					margin: 6%;
 			}
 			#nav_items {
-				background-color:#cbacba;
+				/*background-color:#cbacba;*/
 				height:40%;
+                width: 76%;
+                margin: 8%;
+                color:#888888;
+                font-size:120%;
 				/*background-color:#dddddd;
 				height:98%;
 				width:24%;
 				float:left;
 				padding:1%;*/
 			}
-		#section {
-			height:98%;
+        #section {
+            /* line-height: 30px; */
+            /*background-color: #eeeeee;
+            height: 78%;
+            width: 66%;
+            float: left;
+            padding: 1%;
+            padding-top: 13%;*/
+            line-height:30px;
 			background-color:#eeeeee;
-			width:40%;
-			float:left;
-			padding:1%;	 	 
-		}
-		#description {
 			height:98%;
-			background-color:#cccccc;
-			width:24%;
+			width:66%;
 			float:left;
 			padding:1%;
-			color:grey;
-		}
+        }
+            #section_main {
+                height:98%;
+                /*background-color:#eeeeee;*/
+                width:55%;
+                float:left;
+                padding:1%;	 
+            }
+            #section_exp {
+                height:98%;
+                /*background-color:#cccccc;*/
+                width:40%;
+                float:left;
+                padding:1%;
+                border-left:  solid #dddddd;
+                /*color:grey;*/
+            }
 	#footer {
 		background-color:black;
 		color:white;
 		clear:both;
-		text-align:center;
-		height:15%;	 
+		height:15%;
+        overflow:hidden;
 	}
+
+
+.button {
+    background-color: rgba(0,179,136,.6);
+    border: none;
+    color: white;
+    height: 50%;
+    width:  15%;
+    text-align: center;
+    text-decoration: none;
+    font-size: 25px;
+    margin: 3% 6%;
+    float: right;
+    cursor: pointer;
+    display:block;
+}
