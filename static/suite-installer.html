@@ -3,38 +3,56 @@
 
 <head>
 	<link rel="stylesheet" type="text/css" href="css/installer.css">
+
+	<script src="https://npmcdn.com/react@15.3.1/dist/react.js"></script>
+    <script src="https://npmcdn.com/react-dom@15.3.1/dist/react-dom.js"></script>
+    <script src="https://npmcdn.com/babel-core@5.8.38/browser.min.js"></script>
+    <script src="https://npmcdn.com/jquery@3.1.0/dist/jquery.min.js"></script>
+    <script src="https://npmcdn.com/remarkable@1.6.2/dist/remarkable.min.js"></script>
 </head>
 
 <body id="body">
+	<script type="text/babel">
+		var Section_Main = React.createClass({
+			render: function() {
+				return (
+					<div>
+						<h1>Welcome to HPE installer</h1>
+						<p>
+							explenation high level what is this installer, what shuold user expect in next stages.
+							if There is a lot to explain, it will be divided to several parts, user can  read while waiting
+						</p>
+						<p>
+							This process is continual and may take time
+							more text explainig about stages and help tips...
+						</p>
+						<p>
+							Things you will need for next stages
+							knowing your liscence level
+							make sure you have HW requirements - memory, CPU, storage needed
+						</p>
+					</div>
+				);
+			}
+		});
+
+		ReactDOM.render(<Section_Main />,  document.getElementById('section_main'));
+
+    </script>
 
 	<div id="center">
 		<div id="nav">
 			<img id="nav_band" src="hpe_logo.svg.png">
 			<div id="nav_items">
 				Intro<br> 
-				License details<br>
-				Registry<br>
 				Suite selection<br>
+				Suite Configuration<br>
 			</div>
 		</div>
 
 
 		<div id="section">
 			<div id="section_main">
-				<h1>Welcome to HPE installer</h1>
-				<p>
-					explenation high level what is this installer, what shuold user expect in next stages.
-					if There is a lot to explain, it will be divided to several parts, user can  read while waiting
-				</p>
-				<p>
-					This process is continual and may take time
-					more text explainig about stages and help tips...
-				</p>
-				<p>
-					Things you will need for next stages
-					knowing your liscence level
-					make sure you have HW requirements - memory, CPU, storage needed
-				</p>
 			</div>
 			<div id="section_exp">
 
@@ -46,6 +64,7 @@
 
 	<div id="footer">
 		<button id="next_button" class="button">Next ></button>
+		<button id="back_button" class="button">< Back</button>
 	</div>
 
 </body>
