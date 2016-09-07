@@ -14,10 +14,63 @@
 <body id="body">
 	<script type="text/babel">
 		var Section_Main = React.createClass({
+			getInitialState: function() {
+				return {
+					step: 0
+				}
+			},
+
+			nextStep: function() {
+				this.setState({
+					step: this.state.step+1
+				});
+			},
+
 			render: function() {
+				var content = (<div>
+						<h1 onClick={this.nextStep}>Welcome to HPE installer</h1>
+						<p>
+							explenation high level what is this installer, what shuold user expect in next stages.
+							if There is a lot to explain, it will be divided to several parts, user can  read while waiting
+						</p>
+						<p>
+							This process is continual and may take time
+							more text explainig about stages and help tips...
+						</p>
+						<p>
+							Things you will need for next stages
+							knowing your liscence level
+							make sure you have HW requirements - memory, CPU, storage needed
+						</p>
+					</div>)
+				if(this.state.step == 1){
+					content = (<div><h1>Welcome to HPE installer 222</h1></div>)
+				}
 				return (
-					<div>
-						<h1>Welcome to HPE installer</h1>
+					content
+				);
+			}
+		});
+
+		ReactDOM.render(<Section_Main />,  document.getElementById('container'));
+
+    </script>
+	<article id="container"></article>
+	<div id="center">
+		<div id="nav">
+			<img id="nav_band" src="hpe_logo.svg.png">
+			<div id="nav_items">
+				Intro<br> 
+				Suite selection<br>
+				Suite Configuration<br>
+			</div>
+		</div>
+
+
+		<div id="section">
+			<div id="section_main">
+				<div>
+						<h1 onClick={this.nextStep}>Welcome to HPE installer</h1>
 						<p>
 							explenation high level what is this installer, what shuold user expect in next stages.
 							if There is a lot to explain, it will be divided to several parts, user can  read while waiting
@@ -32,27 +85,6 @@
 							make sure you have HW requirements - memory, CPU, storage needed
 						</p>
 					</div>
-				);
-			}
-		});
-
-		ReactDOM.render(<Section_Main />,  document.getElementById('section_main'));
-
-    </script>
-
-	<div id="center">
-		<div id="nav">
-			<img id="nav_band" src="hpe_logo.svg.png">
-			<div id="nav_items">
-				Intro<br> 
-				Suite selection<br>
-				Suite Configuration<br>
-			</div>
-		</div>
-
-
-		<div id="section">
-			<div id="section_main">
 			</div>
 			<div id="section_exp">
 
