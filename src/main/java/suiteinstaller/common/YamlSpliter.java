@@ -17,7 +17,7 @@ public class YamlSpliter {
 		try {
 			FileInputStream fis = new FileInputStream(yamlFile);
 			BufferedReader in = new BufferedReader(new InputStreamReader(fis));
-			
+
 			String aLine;
 			StringBuffer sb = new StringBuffer();
 			int part = 0;

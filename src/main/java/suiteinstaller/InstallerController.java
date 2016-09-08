@@ -1,7 +1,10 @@
 package suiteinstaller;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -36,8 +39,8 @@ public class InstallerController {
 		K8S_TYPE_MAP.put("deployment", "deployments");
 	}
 	
-//	private static final String YAML_FOLDER_TEMPLATE =  "/pv_suite_install/$SUITE/output/";
-	private static final String YAML_FOLDER_TEMPLATE =  "C:\\Users\\Administrator\\Desktop\\test\\";
+	private static final String YAML_FOLDER_TEMPLATE =  "/pv_suite_install/$SUITE/output/";
+//	private static final String YAML_FOLDER_TEMPLATE =  "C:\\Users\\Administrator\\Desktop\\test\\";
 	
 	private static final String SHELL_PATH = "/bin/kubectl_create.sh";
 	
@@ -79,10 +82,19 @@ public class InstallerController {
 	}
 
 	private void createKubeInstance(String API_SERVER_HOST, String API_SERVER_PORT, String namespace, String type,
-			String yamlFile) throws IOException {
+			String yamlFile) throws IOException, InterruptedException {
 		String[] commands = {SHELL_PATH, API_SERVER_HOST, API_SERVER_PORT, namespace, type, yamlFile};
 		System.out.println("Going to Execute commands : " +  Arrays.toString(commands));
-//		Runtime.getRuntime().exec(commands);
+		Process p = Runtime.getRuntime().exec(commands);
+	    p.waitFor();                // Wait for the process to finish.
+
+	    System.out.println("----");
+	    BufferedInputStream in = new  BufferedInputStream(p.getInputStream());
+	    BufferedReader br = new BufferedReader(new InputStreamReader(in));
+	    String s;
+	    while ((s = br.readLine()) != null)    System.out.println(s);
+	    
+	    System.out.println("Script executed successfully");
 	}
 }
 
