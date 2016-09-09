@@ -1,95 +1,76 @@
-#body {
-	/*css3 高度满屏, 大多数浏览器支持*/
-	height: 93vh;
-	margin-left: 15%;
-	margin-right: 15%;
-	margin-top: 5vh
+#center {
+	overflow:hidden;
+	zoom:1;
+	height:100%;
 }
-	#center {
-		overflow:hidden;
-		zoom:1;
-		height:80%;
-	}
-		#nav {
-			line-height:30px;
-			background-color:#dddddd;
-			height:98%;
-			width:30%;
-			float:left;
-			padding:1%;
-		}
-			#nav_band {
-				    /* background-color: #bacbac; */
-					height: 18%;
-					padding-bottom: 8%;
-					border-bottom:  solid rgba(0,179,136,.6);
-					width: 76%;
-					margin: 6%;
-			}
-			#nav_items {
-				/*background-color:#cbacba;*/
-				height:40%;
-                width: 76%;
-                margin: 8%;
-                color:#888888;
-                font-size:120%;
-				/*background-color:#dddddd;
-				height:98%;
-				width:24%;
-				float:left;
-				padding:1%;*/
-			}
-        #section {
-            /* line-height: 30px; */
-            /*background-color: #eeeeee;
-            height: 78%;
-            width: 66%;
-            float: left;
-            padding: 1%;
-            padding-top: 13%;*/
-            line-height:30px;
-			background-color:#eeeeee;
-			height:98%;
-			width:66%;
-			float:left;
-			padding:1%;
-        }
-            #section_main {
-                height:98%;
-                /*background-color:#eeeeee;*/
-                width:55%;
-                float:left;
-                padding:1%;	 
-            }
-            #section_exp {
-                height:98%;
-                /*background-color:#cccccc;*/
-                width:40%;
-                float:left;
-                padding:1%;
-                border-left:  solid #dddddd;
-                /*color:grey;*/
-            }
-	#footer {
-		background-color:black;
-		color:white;
-		clear:both;
-		height:15%;
-        overflow:hidden;
-	}
+#nav {
+	background-color: #dddddd;
+    height: 100%;
+    width: 330px;
+    float: left;	
+    padding-left: 70px;
+}
+#nav-title {
+    background-color: transparent; 
+	height: 190px;
+	/*border-bottom:  solid #01A982;*/
+	width: 400px;
+}
+#nav-hr {
+    height: 2px;
+    background-color: #01A982;
+	/*margin-left: 70px;*/
+	width: 260px;
+}
+#nav-logo {
+    width:250px;
+    /*margin-left: 70px;*/
+    margin-top: 30px; 
+}
+	
+.menu-li{
+	list-style:none;
+	line-height: 30px;
+}
+#section {
+    line-height:30px;
+	background-color:#eeeeee;
+	height:100%;
+	float:left;
+	padding-top: 180px;
+}
+#section_main {
+    height:98%;
+    width:60%;
+    float:left;
+}
+#section_exp {
+	width:35%;
+    height:98%;
+    float:left;
+    border-left:  solid #dddddd;
+}
 
 
-.button {
-    background-color: rgba(0,179,136,.6);
+#footer {
+	position: fixed;
+	background-color:black;
+	color:white;
+	width: 100%;
+	height:90px;
+	bottom: 0px;
+	left: 0px;
+    overflow:hidden;
+}
+
+
+.footer-button {
+    background-color: #01A982;
     border: none;
     color: white;
-    height: 50%;
-    width:  15%;
-    text-align: center;
-    text-decoration: none;
+    height: 50px;
+    width:  160px;
     font-size: 25px;
-    margin: 3% 6%;
     float: right;
-    cursor: pointer;
-    display:block;
+    cursor: pointer;    
 }
