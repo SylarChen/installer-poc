@@ -2,6 +2,8 @@ mv suite-installer-1.0 suite-installer-1.0.jar
 docker build -t suite-installer .
 ./createFolderInPV.sh
 watch ./statusPods.sh
+
+kl create -f nginx-ingress.yaml
 kl --namespace=kube-system create -f suiteinstaller.yaml
 kl --namespace=kube-system exec -it suite-installer bash
 

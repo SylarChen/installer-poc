@@ -1,0 +1,72 @@
+apiVersion: v1
+kind: ConfigMap
+metadata: 
+  name: am-common-configmap
+data: 
+  common.propertis: |- 
+    DB_engine=Oracle
+    DB_datasource=16.186.74.118/AMORA12C
+    DB_login=AMO15088en
+    DB_password=password
+    DB_library_path=/app/AssetManager/x64/libaamapi96.so
+    promptForPwd=false
+    Password_First_Value=bigintcs:006c33-713236-6a6461-346b34-6f6e64-366278-f578fc-7c966a-cd9050-81361b-d20387-AC614F
+    Password_Second_Value=bigintcs:006c33-713236-6a6461-346b34-6f6e64-36627b-7a8797-84bd9c-30af3b-9101c6-3897a7-59D53C
+
+----
+apiVersion: v1
+kind: ConfigMap
+metadata: 
+  name: am-websvc-configmap
+data: 
+  websvc.propertis: |- 
+    Lwsso_EnableLwssoFramework=true
+    Lwsso_Domain=asiapacific.hpqcorp.net
+    Lwsso_UserNameHeaderName=SM_USER
+    Lwsso_SharedEncryptionKey=lwsso-shared-encryption-key
+    WebService_LoadOnStartup=R960/*
+
+----
+apiVersion: v1
+kind: ConfigMap
+metadata: 
+  name: am-webtier-configmap
+data: 
+  webtier.propertis: |- 
+    org_owasp_csrfguard_Enabled=false
+    WebService_Version=R960
+    WebService_EndPoint_SOAP=http://localhost:8081/AssetManagerWebService/services
+    WebService_EndPoint_REST=http://localhost:8081/AssetManagerWebService/rest
+    WebService_EndPoint_RS=http://localhost:8081/AssetManagerWebService/rs
+    FullTextSearch_Server_URL=http://amkuminion1.asiapacific.hpqcorp.net/quicksearch/search
+
+----
+apiVersion: v1
+kind: ConfigMap
+metadata: 
+  name: am-apm-configmap
+data: 
+  apm.propertis: |- 
+    AM_user=Admin
+
+----
+apiVersion: v1
+kind: ConfigMap
+metadata: 
+  name: am-ess-configmap
+data: 
+  ess.propertis: |- 
+    ws_port=8081
+
+----
+apiVersion: v1
+kind: ConfigMap
+metadata: 
+  name: am-quicksearch-configmap
+data: 
+  quicksearch.propertis: |- 
+    WebService_LoadOnStartup=R960/*
+    AssetManager_RecordSearchIndexDir=/app/index
+    LWSSO_domain=asiapacific.hpqcorp.net
+    LWSSO_userNameHeaderName=SM_USER
+    LWSSO_initString=lwsso-shared-encryption-key

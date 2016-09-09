@@ -1,0 +1,545 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: am-web-rc
+  labels:
+    name: am-web-rc
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: am-web-pod
+    spec:
+      volumes:
+      - name : "am-web-log"
+        hostPath:
+          path: /logs
+      - name: "am-common-configmap"
+        configMap:
+          name: am-common-configmap
+      - name: "am-websvc-configmap"
+        configMap:
+          name: am-websvc-configmap
+      - name: "am-webtier-configmap"
+        configMap:
+          name: am-webtier-configmap
+      containers:
+      - name: am-websvc-pod
+        image: docker.hos.hpecorp.net/itsma/am-websvc:v1-beta 
+        ports:
+        - containerPort: 8081
+        volumeMounts:
+        - mountPath: "/var/logs"
+          name: "am-web-log"
+        - mountPath: "/properties/common"
+          name: "am-common-configmap"
+        - mountPath: "/properties/websvc"
+          name: "am-websvc-configmap"
+        lifecycle:
+          preStop:
+           exec:
+            command: ["/app/apache-tomcat-8/bin/catalina.sh", "stop"]
+      - name: am-webtier-pod
+        image: docker.hos.hpecorp.net/itsma/am-webtier:v1-beta
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - mountPath: "/var/logs"
+          name: "am-web-log"
+        - mountPath: "/properties/common"
+          name: "am-common-configmap"
+        - mountPath: "/properties/webtier"
+          name: "am-webtier-configmap"
+        lifecycle:
+          preStop:
+           exec:
+            command: ["/app/apache-tomcat-8/bin/catalina.sh", "stop"]
+      imagePullSecrets:
+       - name: registrypullsecret
+#      nodeName: amkuminion1.asiapacific.hpqcorp.net
+
+----
+apiVersion: v1
+kind: Service
+metadata:
+  name: am-web-svc
+  labels:
+    name: am-web-svc
+spec:
+  type: NodePort
+  ports:
+  - name: websvc
+    port: 8081
+    targetPort: 8081
+  - name: webtier
+    port: 8080
+    targetPort: 8080
+  - name: nodewt
+    port: 8080
+    nodePort: 30001
+  - name: nodews
+    port: 8081
+    nodePort: 30002
+  # label keys and values that must match in order to receive traffic for this service
+  selector:
+    name: am-web-pod
+
+----
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: am-bnode-rc
+  labels:
+    name: am-bnode-rc
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: am-bnode-pod
+    spec:
+      volumes:
+      - name: "am-bnode-log"
+        hostPath:
+          path: "/logs"
+      - name: "am-bnode-config"
+        hostPath:
+          path: "/home/admin/config"
+      containers:
+      - name: am-bnode-pod
+        image: docker.hos.hpecorp.net/itsma/am-bnode:v1-beta
+        ports:
+         - containerPort: 8080
+        volumeMounts:
+         - mountPath: "/config/am-browser"
+           name: "am-bnode-config"
+         - mountPath: "/var/logs"
+           name: "am-bnode-log"
+      imagePullSecrets:
+       - name: registrypullsecret
+#      nodeName: amkuminion1.asiapacific.hpqcorp.net
+
+----
+apiVersion: v1
+kind: Service
+metadata:
+  name: am-bnode-svc
+  labels:
+    name: am-bnode-svc
+spec:
+  type: NodePort
+  ports:
+  # the port that this service should serve on
+  - nodePort: 30005
+    port: 8080
+  # label keys and values that must match in order to receive traffic for this service
+  selector:
+    name: am-bnode-pod
+
+----
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: default-http-backend
+spec:
+  replicas: 1
+  selector:
+    app: default-http-backend
+  template:
+    metadata:
+      labels:
+        app: default-http-backend
+    spec:
+      terminationGracePeriodSeconds: 60
+      containers:
+      - name: default-http-backend
+        # Any image is permissable as long as:
+        # 1. It serves a 404 page at /
+        # 2. It serves 200 on a /healthz endpoint
+        image: gcr.io/google_containers/defaultbackend:1.0
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+        ports:
+        - containerPort: 8080
+        resources:
+          limits:
+            cpu: 10m
+            memory: 20Mi
+          requests:
+            cpu: 10m
+            memory: 20Mi
+#      nodeName: amkuminion1.asiapacific.hpqcorp.net
+
+----
+apiVersion: v1
+kind: Service
+metadata:
+  name: default-http-backend
+  labels:
+    name: default-http-backend
+spec:
+  #type: NodePort
+  ports:
+    # the port that this service should serve on
+    - targetPort: 8080
+      port: 80
+  # label keys and values that must match in order to receive traffic for this service
+  selector:
+    app: default-http-backend
+
+----
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: nginx-ingress-controller
+  labels:
+    k8s-app: nginx-ingress-lb
+spec:
+  replicas: 1
+  selector:
+    k8s-app: nginx-ingress-lb
+  template:
+    metadata:
+      labels:
+        k8s-app: nginx-ingress-lb
+        name: nginx-ingress-lb
+    spec:
+      terminationGracePeriodSeconds: 60
+      imagePullSecrets:
+        - name: registrypullsecret
+      containers:
+      #- image: gcr.io/google_containers/nginx-ingress-controller:0.5
+      - image: docker.hos.hpecorp.net/itsma/nginx-ingress-controller:0.5
+        name: nginx-ingress-lb
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 10249
+            scheme: HTTP
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+        # use downward API
+        env:
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+        ports:
+        - containerPort: 80
+          hostPort: 80
+        - containerPort: 443
+          hostPort: 443
+        - containerPort: 8080
+          hostPort: 8089
+        args:
+        - /nginx-ingress-controller
+        - --default-backend-service=default/default-http-backend
+#      nodeName: amkuminion1.asiapacific.hpqcorp.net
+
+----
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-load-balancer-conf
+data:
+  enable-vts-status: "true"
+
+----
+# Copyright 2015 Google Inc. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Configuration to deploy release version of the Dashboard UI.
+#
+# Example usage: kubectl create -f <this_file>
+
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  labels:
+    app: kubernetes-dashboard
+    version: v1.1.0
+  name: kubernetes-dashboard
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kubernetes-dashboard
+  template:
+    metadata:
+      labels:
+        app: kubernetes-dashboard
+    spec:
+      containers:
+      - name: kubernetes-dashboard
+        image: gcr.io/google_containers/kubernetes-dashboard-amd64:v1.1.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 9090
+          protocol: TCP
+        args:
+          # Uncomment the following line to manually specify Kubernetes API server Host
+          # If not specified, Dashboard will attempt to auto discover the API server and connect
+          # to it. Uncomment only if the default does not work.
+          # - --apiserver-host=http://my-address:port
+          - --apiserver-host=http://16.155.195.65:8080
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 9090
+          initialDelaySeconds: 30
+          timeoutSeconds: 30
+#      nodeName: amkuminion1.asiapacific.hpqcorp.net
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    app: kubernetes-dashboard
+  name: kubernetes-dashboard
+  namespace: default
+spec:
+  #type: NodePort
+  ports:
+  - port: 80
+    targetPort: 9090
+    #-nodePort: 30081
+  selector:
+    app: kubernetes-dashboard
+
+----
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: am-apm-rc
+  labels:
+    name: am-apm-rc
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: am-apm-pod
+    spec:
+      volumes:
+      - name : "am-apm-log"
+        hostPath:
+          path: /logs
+      - name : "am-common-configmap"
+        configMap:
+          name: am-common-configmap
+      - name : "am-apm-configmap"
+        configMap:
+          name: am-apm-configmap
+      containers:
+      - name: am-apm-pod
+        image: docker.hos.hpecorp.net/itsma/am-apm:v1-beta 
+        ports:
+        - containerPort: 8081
+        volumeMounts:
+        - mountPath: "/var/logs"
+          name: "am-apm-log"
+        - mountPath: "/properties/common"
+          name: "am-common-configmap"
+        - mountPath: "/properties/apm"
+          name: "am-apm-configmap"
+        lifecycle:
+          preStop:
+           exec:
+            command: ["/app/apache-tomcat-8/bin/catalina.sh", "stop"]
+      imagePullSecrets:
+       - name: registrypullsecret
+#      nodeName: amkuminion1.asiapacific.hpqcorp.net
+
+----
+apiVersion: v1
+kind: Service
+metadata:
+  name: am-apm-svc
+  labels:
+    name: am-apm-svc
+spec:
+  #type: NodePort
+  ports:
+    # the port that this service should serve on
+    - targetPort: 8080 
+      port: 8080
+  # label keys and values that must match in order to receive traffic for this service
+  selector:
+    name: am-apm-pod
+
+----
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: am-ess-rc
+  labels:
+    name: am-ess-rc
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: am-ess-pod
+    spec:
+      volumes:
+      - name : "am-ess-log"
+        hostPath:
+          path: /logs
+      - name : "am-common-configmap"
+        configMap:
+          name: am-common-configmap
+      - name : "am-ess-configmap"
+        configMap:
+          name: am-ess-configmap
+      containers:
+      - name: am-ess-pod
+        image: docker.hos.hpecorp.net/itsma/am-ess:v1-beta 
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - mountPath: "/var/logs"
+          name: "am-ess-log"
+        - mountPath: "/properties/common"
+          name: "am-common-configmap"
+        - mountPath: "/properties/ess"
+          name: "am-ess-configmap"
+        lifecycle:
+          preStop:
+           exec:
+            command: ["/app/apache-tomcat-8/bin/catalina.sh", "stop"]
+      imagePullSecrets:
+       - name: registrypullsecret
+#      nodeName: amkuminion1.asiapacific.hpqcorp.net
+
+----
+apiVersion: v1
+kind: Service
+metadata:
+  name: am-ess-svc
+  labels:
+    name: am-ess-svc
+spec:
+  type: NodePort
+  ports:
+    # the port that this service should serve on
+    - nodePort: 30004
+      port: 8080
+  # label keys and values that must match in order to receive traffic for this service
+  selector:
+    name: am-ess-pod
+
+----
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: am-webtier-svc
+  namespace: default
+spec:
+  rules:
+  - host: amkuminion1.asiapacific.hpqcorp.net
+    http:
+      paths:
+      - backend:
+          serviceName: am-web-svc
+          servicePort: 8080
+        path: /AssetManager
+      - backend:
+          serviceName: am-web-svc
+          servicePort: 8081
+        path: /AssetManagerWebService
+      - backend:
+          serviceName: am-bnode-svc
+          servicePort: 8080
+        path: /amb
+      - backend:
+          serviceName: am-quicksearch-svc
+          servicePort: 8080
+        path: /quicksearch
+      - backend:
+          serviceName: am-ess-svc
+          servicePort: 8080
+        path: /ServiceCatalog
+      - backend:
+          serviceName: kubernetes-dashboard
+          servicePort: 80
+        path: /
+
+----
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: am-quicksearch-rc
+  labels:
+    name: am-quicksearch-rc
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: am-quicksearch-pod
+    spec:
+      volumes:
+      - name: "am-quicksearch-log"
+        hostPath:
+          path: /logs
+      - name: "am-common-configmap"
+        configMap:
+          name: am-common-configmap
+      - name: "am-quicksearch-configmap"
+        configMap:
+          name: am-quicksearch-configmap
+      containers:
+      - name: am-quicksearch-pod
+        image: docker.hos.hpecorp.net/itsma/am-quicksearch:v1-beta 
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - mountPath: "/var/logs"
+          name: "am-quicksearch-log"
+        - mountPath: "/properties/common"
+          name: "am-common-configmap"
+        - mountPath: "/properties/quicksearch"
+          name: "am-quicksearch-configmap"
+      imagePullSecrets:
+       - name: registrypullsecret
+#      nodeName: amkuminion1.asiapacific.hpqcorp.net
+
+----
+apiVersion: v1
+kind: Service
+metadata:
+  name: am-quicksearch-svc
+  labels:
+    name: am-quicksearch-svc
+spec:
+  type: NodePort
+  ports:
+    # the port that this service should serve on
+    - nodePort: 30003
+      port: 8080
+  # label keys and values that must match in order to receive traffic for this service
+  selector:
+    name: am-quicksearch-pod

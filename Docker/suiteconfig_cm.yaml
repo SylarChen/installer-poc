@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: suite-conf-cm
+  namespace: kube-system
+data:
+  installer.ip: nothing
+  installer.port: "8080"
+  nfs.ip: nothing
+  nfs.expose: nothing

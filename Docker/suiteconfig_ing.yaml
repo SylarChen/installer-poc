@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: suite-config
+  namespace: kube-system
+  annotations:
+    ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: sgdlitvm0429.hpeswlab.net
+    http:
+      paths:
+      - backend:
+          serviceName: suite-conf-svc
+          servicePort: 8080
+        path: /suiteConfig

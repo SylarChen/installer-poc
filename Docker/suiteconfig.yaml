@@ -7,19 +7,37 @@ metadata:
 spec:
   containers:
   - name: suite-config
-    image: suite-installer
+    image: shc-nexus-repo.hpeswlab.net:9000/itsma/suite-installer:5a1689f
     imagePullPolicy: IfNotPresent
     env:
     - name: SUITE_INSTALLER_IP
-      value: 16.187.189.90
+      valueFrom:
+        configMapKeyRef:
+          name: suite-conf-cm
+          key: installer.ip
     - name: SUITE_INSTALLER_PORT
-      value: "30000"
+      valueFrom:
+        configMapKeyRef:
+          name: suite-conf-cm
+          key: installer.port
+    - name: NFS_SERVER
+      valueFrom:
+        configMapKeyRef:
+          name: suite-conf-cm
+          key: nfs.ip
+    - name: NFS_OUTPUT_PATH
+      valueFrom:
+        configMapKeyRef:
+          name: suite-conf-cm
+          key: nfs.expose
     ports:
     - containerPort: 8080
     volumeMounts:
     - name: image-store
-      mountPath: /pv_suite_conf
+      mountPath: /yamls_output
       subPath: suite-install/itsma
+  nodeSelector:
+    poc: suiteinstaller
   volumes:
   - name: image-store
     persistentVolumeClaim:

@@ -1,7 +1,24 @@
 apiVersion: v1
+kind: Service
+metadata:
+  name: suite-installer-svc
+  namespace: kube-system
+spec:
+  #type: NodePort
+  ports:
+  - port: 8080
+  #  nodePort: 30022
+    targetPort: 8080
+  # label keys and values that must match in order to receive traffic for this service
+  selector:
+    name: suite-installer-app
+
+----
+apiVersion: v1
 kind: Pod
 metadata:
   name: suite-installer
+  namespace: kube-system
   labels:
     name: suite-installer-app
 spec:
@@ -11,31 +28,42 @@ spec:
     imagePullPolicy: IfNotPresent
     env:
     - name: API_SERVER_IP
-      value: 16.187.189.90
+      value: 16.187.189.223
+    - name: API_SERVER_HOST
+      value: 16.187.189.223
     - name: API_SERVER_PORT
       value: "8080"
+    - name: NFS_SERVER
+      value: 16.187.189.223
+    - name: NFS_OUTPUT_PATH
+      value: /var/vols/ITOM
     ports:
     - containerPort: 8080
     volumeMounts:
     - name: image-store
       mountPath: /pv_suite_install
       subPath: suite-install
+  nodeSelector:
+    poc: suiteinstaller
   volumes:
   - name: image-store
     persistentVolumeClaim:
       claimName: itom-vol-claim
 
-
 ----
-apiVersion: v1
-kind: Service
+apiVersion: extensions/v1beta1
+kind: Ingress
 metadata:
-  name: suite-installer-svc
+  name: suite-installer
+  namespace: kube-system
+  annotations:
+    ingress.kubernetes.io/rewrite-target: /
 spec:
-  type: NodePort
-  ports:
-  - port: 8080
-    nodePort: 30000
-  # label keys and values that must match in order to receive traffic for this service
-  selector:
-    name: suite-installer-app
+  rules:
+  - host: sgdlitvm0429.hpeswlab.net
+    http:
+      paths:
+      - backend:
+          serviceName: suite-installer-svc
+          servicePort: 8080
+        path: /suiteInstaller
