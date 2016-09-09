@@ -88,7 +88,6 @@ public class InstallerController {
 		Process p = Runtime.getRuntime().exec(commands);
 	    p.waitFor();                // Wait for the process to finish.
 
-	    System.out.println("----");
 	    BufferedInputStream in = new  BufferedInputStream(p.getInputStream());
 	    BufferedReader br = new BufferedReader(new InputStreamReader(in));
 	    String s;
@@ -103,11 +102,11 @@ public class InstallerController {
 //	  "suiteNameSpace": "default",
 //	  "yamlList": [
 //	    {
-//	      "yaml": "amsuite.yaml"
+//	      "yaml": "configmap.yaml"
 //	    },
 //	    {
-//	      "yaml": "configmap.yaml",
-//	      "type": "configmap"
+//	      "yaml": "amsuite.yaml"
 //	    }
+//
 //	  ]
 //	}
