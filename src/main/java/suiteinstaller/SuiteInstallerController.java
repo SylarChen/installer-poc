@@ -29,20 +29,21 @@ public class SuiteInstallerController {
     public String createPod() {
 		//Execute command
 		//curl -H "Content-Type: application/yaml" -X POST http://16.187.189.90:8080/api/v1/namespaces/default/pods -d "$(cat pg-2.yaml)"
-		String host = "\"" + System.getenv("SUITE_INSTALLER_SVC_SERVICE_HOST") + "\"";
-		String port = "\"" + System.getenv("SUITE_INSTALLER_SVC_SERVICE_PORT") + "\"";
-		String nfs_host = "\"" + System.getenv("NFS_SERVER") + "\"";
-		String nfs_path = "\"" + System.getenv("NFS_OUTPUT_PATH") + "\"";
+		String host = System.getenv("SUITE_INSTALLER_SVC_SERVICE_HOST");
+		//port hard code 8080
+//		String port = "\"" + System.getenv("SUITE_INSTALLER_SVC_SERVICE_PORT") + "\"";
+		String nfs_host = System.getenv("NFS_SERVER");
+		String nfs_path = System.getenv("NFS_OUTPUT_PATH");
 		
-		System.out.println("Going to replace suite config yamls: " + host + " " + port + " " +  nfs_host + " " + nfs_path); 
-		String yamlFile = "/suite_conf_yamls/itsma/suiteconfig_cm.yaml";
+		System.out.println("Going to replace suite config yamls: " + host + " " +  nfs_host + " " + nfs_path); 
+		String yamlFile = "/pv_suite_install/itsma/suiteconfig_cm.yaml";
 
 		try {
 			YamlReader reader = new YamlReader(new FileReader(yamlFile));
 			Map configmap = (Map) reader.read();
 			Map data = (Map) configmap.get("data");
 			data.put("installer.ip", host);
-			data.put("installer.port", port);
+//			data.put("installer.port", port);
 			data.put("nfs.ip", nfs_host);
 			data.put("nfs.expose", nfs_path);
 			YamlWriter writer = new YamlWriter(new FileWriter(yamlFile));
