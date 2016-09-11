@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<link rel="stylesheet" type="text/css" href="css/installer.css">
+  	<link rel="stylesheet" href="css/hpe-font.css" />
+	<script src="js/react.js"></script>
+    <script src="js/react-dom.js"></script>
+    <script src="js/browser.min.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/remarkable.min.js"></script>
+    <style>
+    body, html {
+     	width: 100%;
+      	height: 100%; 
+      	min-width: 1000px;
+      	min-height: 600px;
+      	margin:0px;
+    }
+  	*{
+		font-family: HPEMetricRegular;
+	}
+	</style>
+</head>
+
+<body id="body">
+    <div id="container">
+        
+    <div>
+    <script type="text/babel">
+        var Section_Intro = React.createClass({
+            render: function() {
+                return (
+                    <div style={{width:'90%',textAlign:'left'}} >
+                        <h1>Welcome to HPE installer</h1>
+                        <p>
+                            explenation high level what is this installer, what shuold user expect in next stages.
+                            if There is a lot to explain, it will be divided to several parts, user can  read while waiting
+                        </p>
+                        <p>
+                            This process is continual and may take time
+                            more text explainig about stages and help tips...
+                        </p>
+                        <p>
+                            Things you will need for next stages
+                            knowing your liscence level
+                            make sure you have HW requirements - memory, CPU, storage needed
+                        </p>
+                    </div>
+                );
+            }
+        });
+
+        var Section_ChooseSuite = React.createClass({    
+            render: function() {
+                return (
+                    <div style={{width:'90%',textAlign:'left'}} >
+                        <h1>Choosing Suite</h1>
+                        <p>
+                            Which Suite's services would you like to install today?
+                        </p>
+                        {
+                            React.Children.map(this.props.suites, function (child) {
+                            return <div>{child}</div>;
+                            })
+                        }
+                        
+                    </div>
+                );
+            }
+        });
+
+        var stateList = ['intro', 'chooseSuite', 'summary'];
+        var MyComponent = React.createClass({
+            getInitialState: function() {
+                return {
+                    cnt: 0,
+                    secState: stateList[0]
+                }
+            },
+
+            nextStep: function() {
+                if(this.state.cnt < stateList.length - 1){
+                    var nextCnt = this.state.cnt+1;
+                    this.setState({
+                        cnt: nextCnt,
+                        secState: stateList[nextCnt]
+                    });
+                }
+            },
+
+            previousStep: function() {
+                if(this.state.cnt > 0){
+                    var pervCnt = this.state.cnt-1;
+                    this.setState({
+                        cnt: pervCnt,
+                        secState: stateList[pervCnt]
+                    });
+                }
+            },
+
+            render: function() {
+                var mainContent = '';
+                if(this.state.secState == 'intro'){
+                    mainContent = <Section_Intro />;
+                }else if(this.state.secState == 'chooseSuite'){
+                    var suites = ['ITSMA', 'DSA', 'AM'];
+                    mainContent = <Section_ChooseSuite suites={suites}/>;
+                }
+                return (
+                    <section>
+                        <div id="center">
+                            <div id="nav">
+                                <div id="nav-title">
+                                    <img id="nav-logo" src="img/hpe_logo.svg.png" />
+                                </div>
+                                <div id="nav-hr"></div>
+                                <ul style={{padding: '0px'}}>
+                                    <li className="menu-li">Intro</li>
+                                    <li className="menu-li">Suite selection</li>
+                                    <li className="menu-li">Summary</li>
+                                </ul>
+                            </div>
+                            <div id="section">
+                                <div id="section_main" style={{align: "center"}}>
+                                    {mainContent}
+                                </div>
+                                <div id="section_exp" style={{align: "center"}}>
+                                    <div id="expcomment" style={{width: '90%', textAlign: 'left'}}>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="footer">
+                            <button id="next_btn" style={{marginTop: '20px', marginRight: '30px'}} className="footer-button" onClick={this.nextStep}>Next &gt;</button>
+                            <button id="back_btn" style={{marginTop: '20px', marginRight: '30px'}} className="footer-button" onClick={this.previousStep}>&lt; Back</button>
+                        </div>
+                    </section>
+                )
+            }
+        });
+        ReactDOM.render(<MyComponent />, document.getElementById('container'));
+    </script>
+
+</body>
+
+</html>
