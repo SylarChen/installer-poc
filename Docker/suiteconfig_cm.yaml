@@ -5,6 +5,6 @@ metadata:
   namespace: kube-system
 data:
   installer.ip: nothing
-  installer.port: "8080"
+  installer.port: nothing
   nfs.ip: nothing
   nfs.expose: nothing

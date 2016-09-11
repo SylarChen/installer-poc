@@ -1,18 +1,17 @@
 {
   "suiteName": "itsma",
-  "suiteNameSpace": "itsma",
+  "suiteNameSpace": "default",
   "yamlList": [
     {
-      "yaml": "configmap.yaml",
-      "type": "configmap"
+      "yaml": "secret.yaml",
+      "type": "secret"
     },
     {
-      "yaml": "test.yaml",
-      "type": "pod"
+      "yaml": "configmap.yaml"
     },
     {
-      "yaml": "test_svc.yaml",
-      "type": "service"
+      "yaml": "amsuite.yaml"
     }
+
   ]
 }

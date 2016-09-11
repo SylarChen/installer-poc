@@ -11,7 +11,7 @@ API_VERSION=v1
 EXTENSION_API_VERSION=extensions/v1beta1
 
 #Avariable K8S Types
-NORMAL_TYPES=(configmaps services replicationcontrollers pods)
+NORMAL_TYPES=(configmaps services replicationcontrollers pods secrets)
 EXTENSION_TYPES=(ingresses deployments)
 
 echo "Generate URL..."

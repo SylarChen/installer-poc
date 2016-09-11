@@ -7,3 +7,7 @@ kl create -f nginx-ingress.yaml
 kl --namespace=kube-system create -f suiteinstaller.yaml
 kl --namespace=kube-system exec -it suite-installer bash
 
+kl --namespace=kube-system exec -it suite-config bash
+#create postBody.json in suite-config pod
+curl -H "Content-Type: application/json" -X POST http://$SUITE_INSTALLER_IP:$SUITE_INSTALLER_PORT/v1/suite-installer/installation -d "$(cat /app/suite-installer/postBody.json)"
+

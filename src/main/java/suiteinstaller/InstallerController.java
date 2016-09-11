@@ -104,7 +104,7 @@ public class InstallerController {
 //	  "suiteNameSpace": "default",
 //	  "yamlList": [
 //		{
-//		  "yaml": "configmap.yaml",
+//		  "yaml": "secret.yaml",
 //		  "type": "secret"
 //		},
 //	    {
