@@ -20,22 +20,24 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.esotericsoftware.yamlbeans.YamlReader;
 import com.esotericsoftware.yamlbeans.YamlWriter;
 
+import suiteinstaller.common.YamlUtils;
+
 @Controller
 @RequestMapping("/suiteinstaller")
 public class SuiteInstallerController {
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping(value="/createPod", method=RequestMethod.GET)
 	@ResponseBody
     public String createPod() {
 		//Execute command
 		//curl -H "Content-Type: application/yaml" -X POST http://16.187.189.90:8080/api/v1/namespaces/default/pods -d "$(cat pg-2.yaml)"
 		String host = System.getenv("SUITE_INSTALLER_SVC_SERVICE_HOST");
-		//port hard code 8080
-//		String port = "\"" + System.getenv("SUITE_INSTALLER_SVC_SERVICE_PORT") + "\"";
+		String port = System.getenv("SUITE_INSTALLER_SVC_SERVICE_PORT");
 		String nfs_host = System.getenv("NFS_SERVER");
 		String nfs_path = System.getenv("NFS_OUTPUT_PATH");
 		
-		System.out.println("Going to replace suite config yamls: " + host + " " +  nfs_host + " " + nfs_path); 
+		System.out.println("Going to replace suite config yamls: " + host + " " + port + " " +   nfs_host + " " + nfs_path); 
 		String yamlFile = "/pv_suite_install/itsma/suiteconfig_cm.yaml";
 
 		try {
@@ -43,12 +45,13 @@ public class SuiteInstallerController {
 			Map configmap = (Map) reader.read();
 			Map data = (Map) configmap.get("data");
 			data.put("installer.ip", host);
-//			data.put("installer.port", port);
+			data.put("installer.port", port);
 			data.put("nfs.ip", nfs_host);
 			data.put("nfs.expose", nfs_path);
 			YamlWriter writer = new YamlWriter(new FileWriter(yamlFile));
 			writer.write(configmap);
-			writer.close();		
+			writer.close();
+			YamlUtils.addQuotesForNum(yamlFile);
 			Runtime.getRuntime().exec("/createpod.sh");
 		} catch (IOException e) {
 			e.printStackTrace();

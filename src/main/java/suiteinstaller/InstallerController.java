@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.esotericsoftware.yamlbeans.YamlReader;
 
-import suiteinstaller.common.YamlSpliter;
+import suiteinstaller.common.YamlUtils;
 
 @Controller
 public class InstallerController {
@@ -37,6 +37,8 @@ public class InstallerController {
 		//extension types
 		K8S_TYPE_MAP.put("ingress", "ingresses");
 		K8S_TYPE_MAP.put("deployment", "deployments");
+		K8S_TYPE_MAP.put("secret", "secrets");
+		
 	}
 	
 	private static final String YAML_FOLDER_TEMPLATE =  "/pv_suite_install/$SUITE/output/";
@@ -59,7 +61,7 @@ public class InstallerController {
 				String type = K8S_TYPE_MAP.get(yaml.getType());
 				String yamlFile = yamlFolder + yaml.getYaml();
 				if(type==null){
-					List<String> fileList = YamlSpliter.split(yamlFile, "---");
+					List<String> fileList = YamlUtils.split(yamlFile, "---");
 					
 					YamlReader reader;
 					for(String filePart : fileList){
@@ -97,10 +99,14 @@ public class InstallerController {
 	}
 }
 
-//{
+//	{
 //	  "suiteName": "itsma",
 //	  "suiteNameSpace": "default",
 //	  "yamlList": [
+//		{
+//		  "yaml": "configmap.yaml",
+//		  "type": "secret"
+//		},
 //	    {
 //	      "yaml": "configmap.yaml"
 //	    },
