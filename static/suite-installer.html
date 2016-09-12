@@ -32,6 +32,7 @@
             margin-bottom: 10px;
             color: #01a982;
             font-size: 18px;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -95,10 +96,15 @@
         $("#section_main").children().remove();
         $("#section_main").append(
                 "<div style='width:90%;text-align:left'>"
-                + "<h1>Choosing Suite</h1>"
-                + "<div class='suiteDiv'><button class='s-btn'>ITSMA</button><button class='s-btn'>ITSMA2</button></div>"
+                + "<h1 style='color: #01A982;'>Choosing Suite</h1><h3>Which Suite's services would you like to install today?</h3>"
+                + "<div class='suiteDiv'><button class='s-btn'>ITSMA</button>"
                 + "</div>");
-
+        $('.s-btn').click(function () {
+            $(this).css({
+                'background-color': '#01a982',
+                'color':'white'
+            }).attr('suiteSelected', true)
+        });
     };
 
 
@@ -110,13 +116,22 @@
             initStep = "ChooseSuite";
             loadChooseSuite();
         } else if (initStep == "ChooseSuite") {
-            initStep = "Capabilities";
-            $("#section_main").children().remove();
             requestIframeUrl(function (url) {
+                initStep = "Capabilities";
+                $("#section_main").children().remove();
+
                 var iframeTpl = '<iframe id="mainFrame" name="mainFrame" width="100%" height="100%"  ' +
                         'frameborder="0" style="display: block; height: 987px;" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>';
-                iframeUrl = window.document.location.origin + url;
+
+                iframeUrl = 'loading.html';
                 $(iframeTpl).appendTo("#section_main").prop('src', iframeUrl);
+
+                iframeStyle();
+
+                setTimeout(function () {
+                    iframeUrl = window.document.location.origin + url;
+					$("#mainFrame").prop('src', iframeUrl);
+                }, 15*1000);
             });
         } else if (initStep == "Capabilities") {
             $("#mainFrame").prop('src', iframeUrl);
@@ -132,7 +147,7 @@
             initStep = "ChooseSuite";
             loadChooseSuite();
         }
-
+        defaultStyle();
     });
     window.onload = function () {
         resizeComponent();
@@ -150,13 +165,24 @@
             url: '/suiteinstaller/createPod',
             type: 'get',
             success: function (data) {
-                //var res = JSON.parse(data);
-                cb("/suiteConfig/configuration.html");
+                cb('/suiteConfig/configuration.html');
             },
             error: function (res) {
                 alert('ERROR:' + res.statusText);
             }
         });
+    }
+    
+    function iframeStyle() {
+        $('#section').css('padding-top', '0');
+        $("#section_main").css('width', '100%');
+        $("#next_btn").text('Refresh');
+    }
+    
+    function defaultStyle() {
+        $('#section').css('padding-top', '190px');
+        $("#section_main").css('width', '60%');
+        $("#next_btn").text('Next >');
     }
 </script>
 

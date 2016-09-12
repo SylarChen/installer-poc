@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        div{
+            /*text-align: center;*/
+            /*vertical-align: middle;*/
+            width:0;height:0;position:fixed;left:50%;rigth:50%;top:50%;bottom:50%;
+            font-size: 19px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="tips">loading...</div>
+
+<script src="js/jquery.min.js"></script>
+<script>
+
+   $(function () {
+       var $tips = $('#tips');
+       var arr = ['', '.', '..', '...'];
+       var index = 0;
+       setInterval(function () {
+           $tips.text('loading' + arr[index++]);
+           if(index === arr.length){
+               index = 0;
+           }
+       }, 500);
+   })
+
+</script>
+
+</body>
+</html>
